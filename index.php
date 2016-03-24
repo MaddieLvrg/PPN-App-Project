@@ -8,7 +8,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 $app = new Silex\Application();
 
 $app->register(new Silex\Provider\TwigServiceProvider(), array('twig.path' => __DIR__.'/views'));
-$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
+
 
 $app['debug'] = true;
 $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
@@ -17,6 +17,8 @@ $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
     }));
     return $twig;
 }));
+
+$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 #sets global value of active path
 $app->before(function ($request) use ($app) {
     $app['twig']->addGlobal('active', $request->get("_route"));
@@ -25,6 +27,10 @@ $app->before(function ($request) use ($app) {
 $app->get('/', function() use ($app) {
     return $app['twig']->render('layout.twig');
 })->bind('home');
+
+$app->get('/archive', function() use ($app) {
+    return $app['twig']->render('archive.twig');
+})->bind('archive');
 
 $app->run();
 
