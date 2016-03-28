@@ -39,23 +39,5 @@ $app->get('/', function() use ($app) {
     return $app['twig']->render('layout.twig');
 })->bind('home');
 
-
 $app->run();
 
-
-/*
-$app -> run();
-
-$app->get('/', function(){
-    return "Hello world";
-});
-*/
-/*
-$app->get('/home', function () use ($twig) {
-    $twig->render('layout.twig', array(
-        'name' => 'Maddie',
-        'age' => 23
-    ));
-    return $twig;
-});
-*/
