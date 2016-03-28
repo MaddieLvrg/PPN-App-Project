@@ -1,0 +1,5 @@
+Options -MultiViews
+    RewriteEngine On
+    RewriteBase /PPN-App-Project/
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
