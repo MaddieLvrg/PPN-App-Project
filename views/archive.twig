@@ -1,0 +1,11 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+    <h2>Archive for {{ date( selectedYear ~ '-' ~ selectedMonth ~ '-01') |date('M, Y') }}</h2>
+    {% for post in archivePosts %}
+        <hr/>
+        <h4><a href="{{ app.request.getBaseURL() }}/post/{{ post['id'] }}">{{ post['title'] }}</a></h4>
+        <p>Posted on {{ post['date'] }}</p>
+        <p>{{ post['content'] }}</p>
+    {% endfor %}
+{% endblock %}

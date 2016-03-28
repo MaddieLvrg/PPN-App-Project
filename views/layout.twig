@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Priceline Partner Network Blog</title>
+
+    <link href= {{ app.request.basepath }}/css/twbs/bootstrap/dist/css/bootstrap.min.css rel="stylesheet">
+    <link href={{ app.request.basepath }}/css/custom-styles.css?v=1.1 rel="stylesheet">
+
+</head>
+<body>
+
+<!-- Header -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="{{ path('home') }}">Priceline Partner Network Blog</a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a href="#menu-toggle" id="menu-toggle">
+                    <span class="glyphicon glyphicon-menu-hamburger"></span>Menu
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Content -->
+<div class="container">
+<div id="content-wrapper" class="" style="padding-top: 30px">
+
+    <!-- Sidebar -->
+    <div id="sidebar-wrapper">
+        <ul class="sidebar-nav" id="sidebar">
+            <li class="sidebar-brand">Recent Posts</li>
+            {% set iterations = min(5, posts|length) %}
+            {% for i in 1..iterations %}
+                <li><a href="{{ app.request.getBaseURL() }}/post/{{ posts|length - i + 1}}">
+                        {{ posts[posts|length - i]['title'] }}</a></li>
+            {% endfor %}
+
+            <li class="sidebar-brand">Archive</li>
+            <!-- Populates archive links. Only provide a link if there are posts to display for the month. -->
+            {% set postCount, prevMonth, prevYear, month, year = 0, 0, 0, 0, 0 %}
+            {% for post in posts %}
+                {% set year =  post['date']|date('Y') %}
+                {% set month =  post['date']|date('m') %}
+                {% if month != prevMonth and postCount > 0 %}
+                    <li><a href="{{ app.request.getBaseURL() }}/archive/{{ prevYear }}/{{ prevMonth }}">
+                            {{ date( prevYear ~ '-' ~ prevMonth ~ '-01') |date('M, Y') }} ({{ postCount }})</a></li>
+                    {% set postCount = 1 %}
+                {% else %}
+                    {% set postCount = postCount + 1 %}
+                {% endif %}
+                {% set prevMonth = month %}
+                {% set prevYear = year %}
+            {% endfor %}
+            {% if year != 0 %}
+                <li><a href="{{ app.request.getBaseURL() }}/archive/{{ year }}/{{ month }}">
+                        {{ date( year ~ '-' ~ month ~ '-01') |date('M, Y') }} ({{ postCount }})</a></li>
+            {% endif %}
+        </ul>
+    </div>
+
+    <!-- Page content -->
+    <div id="page-content-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    {% block content %}
+                        <h2>Welcome to the Blog!</h2>
+                        {% set iterations = min(3, posts|length) %}
+                        {% for i in 1..iterations %}
+                            <hr/>
+                            <h4><a href="{{ app.request.getBaseURL() }}/post/{{ posts[posts|length - i]['id'] }}">
+                                    {{ posts[posts|length - i]['title'] }}</a></h4>
+                            <p>Posted on {{  posts[posts|length - i]['date'] }}</p>
+                            <p>{{ posts[posts|length - i]['content'] }}</p>
+                        {% endfor %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <p class="text-muted">This blog was made with Bootstrap, Twig, and Silex. Written by Madeline Lavergne.</p>
+    </div>
+</footer>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+<script src={{ app.request.basepath }}/css/twbs/bootstrap/dist/js/bootstrap.min.js></script>
+<script src={{ app.request.basepath }}/js/custom-scripts.js></script>
+
+</body>
+</html>
